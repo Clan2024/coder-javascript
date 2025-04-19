@@ -1,44 +1,77 @@
+const formulario = document.getElementById("formularioAhorro");
+const resultadoDiv = document.getElementById("resultado");
+const historialUl = document.getElementById("historial");
+const cargarMetasBtn = document.getElementById("cargarMetas");
+const listaMetas = document.getElementById("listaMetas");
 
-const calcularAhorro = () => {
-    let historialAhorro = [];
+let historialAhorro = [];
 
-    while (true) {
-        let sueldo = parseInt(prompt("¿Cuál es tu sueldo mensual?"));
-        let porcentaje = parseInt(prompt("¿Qué porcentaje de tu sueldo estás dispuesto a ahorrar mensualmente? (Ingresa solo el número)"));
-        let montoObjetivo = parseInt(prompt("¿Cuál es la meta de ahorro que deseas alcanzar?"));
-        let numeroDeMeses = parseInt(prompt("¿En cuántos meses deseas lograrlo?"));
+formulario.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-        if ([sueldo, porcentaje, montoObjetivo, numeroDeMeses].some(isNaN) || [sueldo, porcentaje, montoObjetivo, numeroDeMeses].some(num => num <= 0)) {
-            alert("¡Por favor, ingresa valores numéricos válidos!");
-            continue;
-        }
+  const sueldo = parseFloat(document.getElementById("sueldo").value);
+  const porcentaje = parseFloat(document.getElementById("porcentaje").value);
+  const montoObjetivo = parseFloat(document.getElementById("meta").value);
+  const numeroDeMeses = parseInt(document.getElementById("meses").value);
 
-        const porcentajeAhorro = (sueldo * porcentaje) / 100;
-        const ahorroMensual = montoObjetivo / numeroDeMeses;
+  if ([sueldo, porcentaje, montoObjetivo, numeroDeMeses].some(isNaN) ||
+      [sueldo, porcentaje, montoObjetivo, numeroDeMeses].some(val => val <= 0)) {
+    mostrarResultado("Por favor, completa todos los campos con valores válidos.", false);
+    return;
+  }
 
-        let resultado = porcentajeAhorro < ahorroMensual
-            ? `No puedes ahorrar suficiente. Necesitas ahorrar $${ahorroMensual.toFixed(2)}, pero solo puedes $${porcentajeAhorro.toFixed(2)}.`
-            : `Puedes lograr tu meta. Debes ahorrar $${ahorroMensual.toFixed(2)} por ${numeroDeMeses} meses.`;
+  const porcentajeAhorro = (sueldo * porcentaje) / 100;
+  const ahorroMensual = montoObjetivo / numeroDeMeses;
 
-       
-        historialAhorro.push({ sueldo, porcentaje, porcentajeAhorro, montoObjetivo, numeroDeMeses, ahorroMensual, resultado });
+  const puedeAhorrar = porcentajeAhorro >= ahorroMensual;
 
-        alert(resultado);
+  const resultadoTexto = puedeAhorrar
+    ? `¡Bien hecho! Puedes alcanzar tu meta. Necesitas ahorrar $${ahorroMensual} al mes por ${numeroDeMeses} meses.`
+    : `Ups... No es posible con tu porcentaje de ahorro actual. Necesitas $${ahorroMensual} al mes pero puedes ahorrar $${porcentajeAhorro} mensualmente, ¡lo importante es empezar!`;
 
-        let opcion = prompt("Ingresa 1 para volver a intentarlo o 2 para salir.");
-        if (opcion !== "1") break;
-    }
+  mostrarResultado(resultadoTexto, puedeAhorrar);
 
+  historialAhorro.push({
+    sueldo,
+    porcentaje,
+    montoObjetivo,
+    numeroDeMeses,
+    porcentajeAhorro,
+    ahorroMensual,
+    resultadoTexto
+  });
 
-    console.log("Historial de intentos:");
-    historialAhorro.forEach((ahorro, index) => console.log(`Intento ${index + 1}: ${ahorro.resultado}`));
+  actualizarHistorial();
+});
 
-    
-    if (historialAhorro.length > 0) {
-        const promedioAhorro = historialAhorro.reduce((acc, a) => acc + a.ahorroMensual, 0) / historialAhorro.length;
-        console.log(`Promedio de ahorro mensual en todos los intentos: $${promedioAhorro.toFixed(2)}`);
-    }
-};
+function mostrarResultado(mensaje, exito) {
+  resultadoDiv.textContent = mensaje;
+  resultadoDiv.classList.remove("oculto", "exito", "error");
+  resultadoDiv.classList.add(exito ? "exito" : "error");
+}
 
+function actualizarHistorial() {
+  historialUl.innerHTML = "";
+  historialAhorro.forEach((item, index) => {
+    const li = document.createElement("li");
+    li.textContent = `Intento ${index + 1}: ${item.resultadoTexto}`;
+    historialUl.appendChild(li);
+  });
+}
 
-calcularAhorro();
+cargarMetasBtn.addEventListener("click", () => {
+  fetch("metas.json")
+    .then((response) => response.json())
+    .then((data) => {
+      listaMetas.innerHTML = "";
+      data.forEach((meta, index) => {
+        const li = document.createElement("li");
+        li.textContent = `Meta ${index + 1}: Ahorrar $${meta.monto} en ${meta.meses} meses.`;
+        listaMetas.appendChild(li);
+      });
+    })
+    .catch((error) => {
+      listaMetas.innerHTML = "<li>Error al cargar las metas sugeridas.</li>";
+      console.error("Error al leer metas.json:", error);
+    });
+});

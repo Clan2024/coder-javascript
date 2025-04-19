@@ -1,0 +1,84 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fef6e4; /* pastel beige */
+    margin: 0;
+    padding: 20px;
+  }
+  
+  .container {
+    max-width: 600px;
+    margin: auto;
+    background-color: #fff1f2; /* rosa pastel */
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1, h2, h3 {
+    text-align: center;
+    color: #463c3c;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-weight: bold;
+    color: #5a4e4d;
+  }
+  
+  input {
+    padding: 10px;
+    border: 1px solid #decfcf;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+  
+  button {
+    padding: 12px;
+    background-color: #c0d4ef; /* celeste pastel */
+    border: none;
+    color: #2f3e46;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #90b4f0;
+  }
+  
+  .resultado {
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .resultado.exito {
+    background-color: #d6f5d6; /* verde pastel */
+    color: #2e6638;
+    border: 1px solid #beecc2;
+  }
+  
+  .resultado.error {
+    background-color: #ffe3e3; /* rosa claro pastel */
+    color: #944040;
+    border: 1px solid #ffcccc;
+  }
+  
+  ul {
+    padding-left: 20px;
+    color: #444;
+  }
+  
+  .oculto {
+    display: none;
+  }
+  

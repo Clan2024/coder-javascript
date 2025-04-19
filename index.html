@@ -1,12 +1,41 @@
 <!DOCTYPE html>
-<html lang= en>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport content=width-device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simulador de Ahorro</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    
-<script src=".//javascript-entrega.js"></script>    
+  <div class="container">
+    <h1>Simulador de Ahorro</h1>
+
+    <form id="formularioAhorro">
+      <label for="sueldo">Sueldo mensual:</label>
+      <input type="number" id="sueldo" required />
+
+      <label for="porcentaje">Porcentaje de ahorro (%):</label>
+      <input type="number" id="porcentaje" required />
+
+      <label for="meta">Meta de ahorro:</label>
+      <input type="number" id="meta" required />
+
+      <label for="meses">Meses para alcanzar la meta:</label>
+      <input type="number" id="meses" required />
+
+      <button type="submit">Calcular</button>
+    </form>
+
+    <section id="resultado" class="resultado oculto"></section>
+
+    <h2>Historial de simulaciones</h2>
+    <ul id="historial"></ul>
+
+    <h3>Metas sugeridas</h3>
+    <button id="cargarMetas">Guarda tus metas</button>
+    <ul id="listaMetas"></ul>
+  </div>
+
+  <script src="./javascript-entrega.js"></script>  
 </body>
 </html>
